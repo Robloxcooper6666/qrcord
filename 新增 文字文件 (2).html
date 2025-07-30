@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>QR碼掃描器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
+    video {
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>📷 QR碼掃描器</h1>
+  <video id="video" autoplay></video>
+  <div id="result">🔍 掃描中...</div>
+
+  <!-- 匯入 jsQR 套件 -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
+  <script>
+    const video = document.getElementById('video');
+    const resultDiv = document.getElementById('result');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(stream => {
+        video.srcObject = stream;
+        requestAnimationFrame(scan);
+      })
+      .catch(err => {
+        resultDiv.textContent = '❌ 無法開啟相機：' + err;
+      });
+
+    function scan() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
+        if (code) {
+          resultDiv.innerHTML = `✅ 掃描結果：<br><strong>${code.data}</strong>`;
+          return; // 停止掃描
+        }
+      }
+      requestAnimationFrame(scan);
+    }
+  </script>
+</body>
+</html>
