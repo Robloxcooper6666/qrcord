@@ -2,48 +2,54 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>QR碼掃描器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>iPhone QR 碼掃描器</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fdfdfd;
       text-align: center;
-      padding: 20px;
+    }
+    header {
+      background-color: #007aff;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
     }
     video {
       width: 100%;
-      max-width: 480px;
-      border: 2px solid #999;
-      border-radius: 8px;
-      margin-bottom: 20px;
+      max-width: 100%;
+      height: auto;
+      border-bottom: 2px solid #ccc;
     }
     #resultLabel {
-      font-size: 20px;
+      margin-top: 15px;
+      font-size: 18px;
       font-weight: bold;
-      margin-top: 10px;
     }
     #resultText {
-      margin-top: 10px;
-      font-size: 18px;
+      font-size: 16px;
       color: #006600;
       background-color: #eaffea;
       padding: 10px;
-      border-radius: 5px;
-      word-break: break-all;
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 10px 20px;
+      border-radius: 8px;
+      word-break: break-word;
+      min-height: 40px;
     }
   </style>
 </head>
 <body>
-  <h1>📷 QR碼掃描器</h1>
-  <video id="video" autoplay></video>
-  
-  <div id="resultLabel">掃描結果：</div>
-  <div id="resultText">🔍 掃描中...</div>
+  <header>📷 QR 碼掃描器</header>
 
-  <!-- 載入 jsQR 函式庫 -->
+  <video id="video" playsinline autoplay></video>
+
+  <div id="resultLabel">掃描結果：</div>
+  <div id="resultText">📡 掃描中...</div>
+
+  <!-- 載入 jsQR -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 
   <script>
@@ -51,19 +57,20 @@
     const resultText = document.getElementById('resultText');
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    let lastResult = "";
+    let lastResult = '';
 
-    // 啟用相機
+    // 啟用 iPhone 後鏡頭
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       .then(stream => {
         video.srcObject = stream;
+        video.setAttribute("playsinline", true); // iOS 必要
+        video.play();
         requestAnimationFrame(scan);
       })
       .catch(err => {
         resultText.textContent = '❌ 無法開啟相機：' + err;
       });
 
-    // 掃描函式
     function scan() {
       if (video.readyState === video.HAVE_ENOUGH_DATA) {
         canvas.width = video.videoWidth;
