@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>QR碼掃描器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+    video {
+      width: 100%;
+      max-width: 480px;
+      border: 2px solid #999;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    #resultLabel {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #resultText {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #006600;
+      background-color: #eaffea;
+      padding: 10px;
+      border-radius: 5px;
+      word-break: break-all;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>📷 QR碼掃描器</h1>
+  <video id="video" autoplay></video>
+  
+  <div id="resultLabel">掃描結果：</div>
+  <div id="resultText">🔍 掃描中...</div>
+
+  <!-- 載入 jsQR 函式庫 -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
+  <script>
+    const video = document.getElementById('video');
+    const resultText = document.getElementById('resultText');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    let lastResult = "";
+
+    // 啟用相機
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(stream => {
+        video.srcObject = stream;
+        requestAnimationFrame(scan);
+      })
+      .catch(err => {
+        resultText.textContent = '❌ 無法開啟相機：' + err;
+      });
+
+    // 掃描函式
+    function scan() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
+        if (code && code.data !== lastResult) {
+          lastResult = code.data;
+          resultText.textContent = code.data;
+        }
+      }
+      requestAnimationFrame(scan);
+    }
+  </script>
+</body>
+</html>
