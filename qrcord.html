@@ -12,39 +12,38 @@
       padding: 0;
       height: 100%;
       background-color: black;
-      color: white;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow: hidden;
     }
 
     #app {
-      position: relative;
-      width: 100%;
-      height: 100vh; /* 100% iPhone 視窗高度 */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      height: 100vh;
       align-items: center;
+      justify-content: center;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
     video {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
+      max-width: 480px;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #444;
+      object-fit: contain; /* ⭐ 顯示完整畫面，避免裁切放大 */
+      background: black;
     }
 
     #resultBox {
-      position: absolute;
-      bottom: 0;
+      margin-top: 15px;
+      padding: 15px;
       width: 100%;
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.7);
+      max-width: 480px;
+      background: rgba(0, 0, 0, 0.75);
       color: #00ff99;
-      padding: 20px 15px;
+      border-radius: 8px;
       text-align: center;
     }
 
