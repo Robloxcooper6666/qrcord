@@ -2,73 +2,86 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>iPhone QR 碼掃描器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>QR 掃描器</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: #fdfdfd;
-      text-align: center;
-    }
-    header {
-      background-color: #007aff;
+      background: black;
       color: white;
-      padding: 15px;
-      font-size: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100%;
+      overflow: hidden;
     }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
     video {
       width: 100%;
-      max-width: 100%;
       height: auto;
-      border-bottom: 2px solid #ccc;
+      object-fit: cover;
+      border: none;
     }
-    #resultLabel {
-      margin-top: 15px;
+
+    #resultBox {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px 10px;
       font-size: 18px;
-      font-weight: bold;
-    }
-    #resultText {
-      font-size: 16px;
-      color: #006600;
-      background-color: #eaffea;
-      padding: 10px;
-      margin: 10px 20px;
-      border-radius: 8px;
+      text-align: center;
+      color: #00ff99;
       word-break: break-word;
-      min-height: 40px;
+    }
+
+    #resultLabel {
+      font-weight: bold;
+      font-size: 16px;
+      color: #aaa;
+    }
+
+    #resultText {
+      margin-top: 8px;
+      font-size: 20px;
+      color: #00ff99;
     }
   </style>
 </head>
 <body>
-  <header>📷 QR 碼掃描器</header>
+  <div id="app">
+    <video id="video" autoplay playsinline></video>
+    <div id="resultBox">
+      <div id="resultLabel">📦 掃描結果</div>
+      <div id="resultText">尚未識別</div>
+    </div>
+  </div>
 
-  <video id="video" playsinline autoplay></video>
-
-  <div id="resultLabel">掃描結果：</div>
-  <div id="resultText">📡 掃描中...</div>
-
-  <!-- 載入 jsQR -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
   <script>
     const video = document.getElementById('video');
     const resultText = document.getElementById('resultText');
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    let lastResult = '';
+    let lastResult = "";
 
-    // 啟用 iPhone 後鏡頭
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       .then(stream => {
         video.srcObject = stream;
-        video.setAttribute("playsinline", true); // iOS 必要
-        video.play();
+        video.setAttribute("playsinline", true);
         requestAnimationFrame(scan);
       })
       .catch(err => {
-        resultText.textContent = '❌ 無法開啟相機：' + err;
+        resultText.textContent = '❌ 相機無法啟用';
       });
 
     function scan() {
