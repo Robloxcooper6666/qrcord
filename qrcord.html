@@ -28,7 +28,7 @@
 
     video {
       width: 100%;
-      max-width: 300px; /* 👈👉 鏡頭畫面限制在較小範圍 */
+      max-width: 300px;
       height: auto;
       border-radius: 10px;
       border: 2px solid #444;
@@ -57,9 +57,22 @@
       font-size: 18px;
       word-break: break-word;
     }
+
+    #credit {
+      position: fixed;
+      top: 8px;
+      right: 12px;
+      font-size: 12px;
+      font-family: "Courier New", cursive;
+      color: rgba(255, 255, 255, 0.5);
+      z-index: 100;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+  <div id="credit">©陳麒安製作ℭ𝔬𝔬𝔭𝔢𝔯ℭ𝔥𝔢𝔫</div>
+
   <div id="app">
     <video id="video" autoplay playsinline></video>
     <div id="resultBox">
