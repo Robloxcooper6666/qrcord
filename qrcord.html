@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <title>QR 掃描器</title>
+  <title>序號QR-cord查詢小工具</title>
   <style>
     html, body {
       margin: 0;
@@ -63,8 +63,8 @@
   <div id="app">
     <video id="video" autoplay playsinline></video>
     <div id="resultBox">
-      <div id="resultLabel">📦 掃描結果</div>
-      <div id="resultText">尚未識別</div>
+      <div id="resultLabel">筆記購買人</div>
+      <div id="resultText">請掃描序號QR-cord</div>
     </div>
   </div>
 
@@ -84,7 +84,7 @@
         requestAnimationFrame(scan);
       })
       .catch(err => {
-        resultText.textContent = '❌ 相機無法啟用';
+        resultText.textContent = '請允許鏡頭使用';
       });
 
     function scan() {
