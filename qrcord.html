@@ -28,19 +28,19 @@
 
     video {
       width: 100%;
-      max-width: 480px;
+      max-width: 300px; /* 👈👉 鏡頭畫面限制在較小範圍 */
       height: auto;
       border-radius: 10px;
       border: 2px solid #444;
-      object-fit: contain; /* ⭐ 顯示完整畫面，避免裁切放大 */
+      object-fit: contain;
       background: black;
     }
 
     #resultBox {
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 15px;
       width: 100%;
-      max-width: 480px;
+      max-width: 320px;
       background: rgba(0, 0, 0, 0.75);
       color: #00ff99;
       border-radius: 8px;
@@ -54,7 +54,7 @@
 
     #resultText {
       margin-top: 5px;
-      font-size: 20px;
+      font-size: 18px;
       word-break: break-word;
     }
   </style>
